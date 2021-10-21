@@ -3,6 +3,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.aspectj.lang.reflect.Pointcut;
 
@@ -13,25 +14,35 @@ public aspect Log {
     Calendar cal = Calendar.getInstance();
     //Aspecto: Deben hacer los puntos de cortes (pointcut) para crear un log con los tipos de transacciones realizadas.
     pointcut success() : call(* money*(..) );
-    after() : success() {
-    	//CodeSignature codeSignature = (CodeSignature) joinPoint.getSignature();
-    	//System.out.println(codeSignature);
+    
+    after() throws IOException : success() {
+    	
+    	FileWriter archivo= null;
+    	String metodo=thisJoinPoint.getSignature().getName();
+    	Date fecha=cal.getTime();
+    	String mensaje=null;
     	try {
-   		
-   		
-   		 FileWriter escritor= new FileWriter(file);
-   		 escritor.write("escrito");
-   		//escritor.println("Primera linea");
-   		 
-   		
+    	archivo= new FileWriter("Log.txt");
+    	if("moneyMakeTransaction".equals(metodo)) {
+    		mensaje= "Transacción realizada"+" "+fecha;
+    		archivo.write(mensaje+"\n");
+        	System.out.println(mensaje+"\n");
+    	}
+    	else if("moneyWithdrawal".equals(metodo)){
+    		mensaje="Retiro realizado"+" "+fecha;
+    		archivo.write(mensaje+"\n");
+        	System.out.println(mensaje+"\n");
+    	}
+    	
+    	
+    	}
+    	catch (Exception e) {
+    	System.out.println("Error: "+e.getMessage());
 
-   		}
-   		catch (Exception e){
-   		System.out.println("Error: "+e.getMessage());
-   		}
-   		finally {
-   			//file
-   		}
-    	System.out.println("hola a todos");
+    	}
+    	finally{
+    	archivo.close();
+    	}
+    	
     }
 	}

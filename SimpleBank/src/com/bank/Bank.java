@@ -80,7 +80,7 @@ public class Bank {
         int id = Integer.valueOf(readConsole("Key: "));
         double money = Double.valueOf(readConsole("Dinero a depositar: "));
         users.get(id-1).setMoney(users.get(id-1).getMoney() + money);
-        
+        //Filewriter escribir=new Filewriter();
     }
     public static void moneyWithdrawal(){
         int id = Integer.valueOf(readConsole("Key: "));
